@@ -439,7 +439,7 @@
                     correctLevel: QRCode.CorrectLevel.H
                 });
 
-                let timeLeft = 90; // 1.5 minutos en segundos
+                let timeLeft = 240; // 4 minutos en segundos
                 const updateTimerText = () => {
                     const mins = Math.floor(timeLeft / 60);
                     const secs = timeLeft % 60;
@@ -461,7 +461,7 @@
                     qrLegend.style.display = 'none';
                     qrCountdown.style.display = 'none';
                     modalMessage.textContent = "Su pedido ha sido finalizado.";
-                }, 90000); 
+                }, 240000); 
             }
 
             if (type === 'success' || (type === 'warning' && currentUser && currentUser.entregado === 'SI')) {

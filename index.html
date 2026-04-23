@@ -294,8 +294,15 @@
         }
 
         @keyframes smoothFade {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
         }
 
         .qr-countdown {
@@ -333,8 +340,8 @@
 
         .modal-content.docente-theme .qr-legend {
             color: #fff;
-            border-color: rgba(255,255,255,0.3);
-            background: rgba(255,255,255,0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .modal-btn {
@@ -368,7 +375,8 @@
             <div class="docente-badge">DOCENTE</div>
             <img src="icono.png" class="modal-icon" id="modalIcon" alt="Logo">
             <div class="modal-message" id="modalMessage"></div>
-            <div id="qrLegend" class="qr-legend">MUESTRE ESTE QR AL PERSONAL DE LA BIBLIOTECA PARA RETIRAR EL MATERIAL</div>
+            <div id="qrLegend" class="qr-legend">MUESTRE ESTE QR AL PERSONAL DE LA BIBLIOTECA PARA RETIRAR EL MATERIAL
+            </div>
             <div id="qrCountdown" class="qr-countdown"></div>
             <div id="qrcode"></div>
             <button class="modal-btn" onclick="closeModal()">Aceptar</button>
@@ -406,7 +414,7 @@
         </div>
     </div>
     <script>
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwfsBFuiZCZ5U7sbhgPzlx_SV5yOeB5NkjOaRYEZjbb3oAaiVZkjMYA7ZfuSxTrKkFeAQ/exec";
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzXgIi4AVmeQBPmiSJm7ZwmwveN1ejLp-78gbhEjjRfxed3SPqoOEw0RkM67z_B57oaMA/exec";
         const dniInput = document.getElementById('dniInput');
         const actionBtn = document.getElementById('actionBtn');
         const btnContainer = document.getElementById('btnContainer');
@@ -463,10 +471,10 @@
             if (type === 'success' && currentUser) {
                 const isDocente = currentUser.tipo && currentUser.tipo.toLowerCase() === 'docente';
                 if (isDocente) modalContent.classList.add('docente-theme');
-                
+
                 qrLegend.style.display = 'block';
                 qrCountdown.style.display = 'block';
-                
+
                 const qrText = `APROBADO//${currentUser.dni}//${currentUser.apellido}//${currentUser.nombre}`;
                 new QRCode(qrContainer, {
                     text: qrText,
@@ -483,9 +491,9 @@
                     const secs = timeLeft % 60;
                     qrCountdown.textContent = `Finaliza en: ${mins}:${secs < 10 ? '0' : ''}${secs}`;
                 };
-                
+
                 updateTimerText();
-                
+
                 qrInterval = setInterval(() => {
                     timeLeft--;
                     updateTimerText();
@@ -499,7 +507,7 @@
                     qrLegend.style.display = 'none';
                     qrCountdown.style.display = 'none';
                     modalMessage.textContent = "Su pedido ha sido finalizado.";
-                }, 240000); 
+                }, 240000);
             }
 
             if (type === 'success' || (type === 'warning' && currentUser && currentUser.entregado === 'SI')) {

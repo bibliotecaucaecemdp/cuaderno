@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Biblioteca CAECE - Retiro de Material</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #006b76;
+            --secondary-color: #00a6ce;
+            --accent-color: #f0f4f8;
+            --text-color: #1a202c;
+            --error-color: #e53e3e;
+            --success-color: #38a169;
+            --glass-bg: rgba(255, 255, 255, 0.95);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 28px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 420px;
+            padding: 35px 25px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .logo-container {
+            margin-bottom: 25px;
+        }
+
+        .logo {
+            width: 100px;
+            height: auto;
+            transition: var(--transition);
+        }
+
+        .logo.spinning {
+            animation: spin 1.5s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 1.6rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        p.subtitle {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+            padding: 0 10px;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 6px;
+            margin-left: 4px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 16px;
+            color: var(--primary-color);
+            opacity: 0.6;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 16px 14px 45px;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: #fff;
+            appearance: none;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(0, 107, 118, 0.1);
+        }
+
+        .user-data-card {
+            background: #f8fafc;
+            border-radius: 18px;
+            padding: 18px;
+            margin-top: 15px;
+            display: none;
+            animation: slideUp 0.4s ease-out;
+            border: 1px solid #e2e8f0;
+            text-align: left;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .data-item { margin-bottom: 10px; }
+        .data-item:last-child { margin-bottom: 0; }
+        .data-label {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: block;
+        }
+        .data-value {
+            font-size: 0.95rem;
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .btn-container {
+            margin-top: 25px;
+        }
+
+        button#actionBtn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 8px 20px rgba(0, 107, 118, 0.2);
+        }
+
+        button#actionBtn:active { transform: scale(0.98); }
+        button#actionBtn:disabled { background: #cbd5e1; cursor: not-allowed; box-shadow: none; }
+
+        /* Modal Styles Mobile-First */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px 20px;
+            border-radius: 28px;
+            width: 100%;
+            max-width: 340px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes modalPop {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-icon { width: 80px; margin-bottom: 20px; }
+        .modal-message {
+            color: var(--text-color);
+            margin-bottom: 20px;
+            line-height: 1.5;
+            font-size: 1.05rem;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        #qrcode {
+            margin-bottom: 20px;
+            padding: 10px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            background: var(--primary-color);
+            color: white;
+            padding: 14px;
+            border-radius: 14px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <img src="icono.png" class="modal-icon" alt="Logo">
+            <div class="modal-message" id="modalMessage"></div>
+            <div id="qrcode"></div>
+            <button class="modal-btn" onclick="closeModal()">Aceptar</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="logo-container">
+            <img src="icono.png" alt="CAECE Logo" id="institutionLogo" class="logo">
+        </div>
+        <h1>Retiro de Cuaderno</h1>
+        <p class="subtitle">Ingresa tu DNI para validar el retiro de material.</p>
+        <div class="form-group">
+            <label for="dniInput">DNI / Documento</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-id-card"></i>
+                <input type="tel" id="dniInput" placeholder="Ej: 12345678" maxlength="10">
+            </div>
+        </div>
+        <div id="userDataCard" class="user-data-card">
+            <div class="data-item">
+                <span class="data-label">Nombre y Apellido</span>
+                <span class="data-value" id="userName">-</span>
+            </div>
+            <div class="data-item">
+                <span class="data-label">Carrera</span>
+                <span class="data-value" id="userCareer">-</span>
+            </div>
+        </div>
+        <div class="btn-container" id="btnContainer">
+            <button id="actionBtn" class="btn-primary">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <span id="btnText">Validar Documento</span>
+            </button>
+        </div>
+    </div>
+    <script>
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxHyCI_lQh_EYYLVj4Ts2XA83pExzexNyi_NiHr14tlj9xvU3rvi4dS_HTIFtY6s1FH-g/exec";
+        const dniInput = document.getElementById('dniInput');
+        const actionBtn = document.getElementById('actionBtn');
+        const btnContainer = document.getElementById('btnContainer');
+        const btnText = document.getElementById('btnText');
+        const logo = document.getElementById('institutionLogo');
+        const userDataCard = document.getElementById('userDataCard');
+        const userName = document.getElementById('userName');
+        const userCareer = document.getElementById('userCareer');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalMessage = document.getElementById('modalMessage');
+        const qrContainer = document.getElementById('qrcode');
+
+        let currentUser = null;
+        let isSearching = true;
+
+        dniInput.addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/[^0-9]/g, '');
+            resetUI();
+        });
+
+        function resetUI() {
+            userDataCard.style.display = 'none';
+            btnContainer.style.display = 'block';
+            actionBtn.disabled = false;
+            actionBtn.style.background = ""; 
+            btnText.textContent = "Validar Documento";
+            actionBtn.querySelector('i').className = "fa-solid fa-magnifying-glass";
+            isSearching = true;
+            currentUser = null;
+            dniInput.disabled = false;
+            qrContainer.innerHTML = "";
+        }
+
+        function showAlert(message, type) {
+            modalMessage.textContent = message;
+            qrContainer.innerHTML = "";
+            modalOverlay.style.display = 'flex';
+            
+            if (type === 'success' && currentUser) {
+                const qrText = `APROBADO//${currentUser.dni}//${currentUser.apellido}//${currentUser.nombre}`;
+                new QRCode(qrContainer, {
+                    text: qrText,
+                    width: 140,
+                    height: 140,
+                    colorDark: "#006b76",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            }
+
+            if (type === 'success' || (type === 'warning' && currentUser && currentUser.entregado === 'SI')) {
+                btnContainer.style.display = 'none';
+            }
+        }
+
+        function closeModal() {
+            modalOverlay.style.display = 'none';
+        }
+
+        actionBtn.addEventListener('click', async () => {
+            const dni = dniInput.value.trim();
+            if (!dni) return showAlert('Por favor, ingresa un DNI.', 'error');
+            if (isSearching) {
+                searchUser(dni);
+            } else {
+                requestMaterial();
+            }
+        });
+
+        async function searchUser(dni) {
+            logo.classList.add('spinning');
+            actionBtn.disabled = true;
+            btnText.textContent = "Procesando...";
+
+            if (typeof google !== 'undefined' && google.script && google.script.run) {
+                google.script.run
+                    .withSuccessHandler(user => {
+                        handleSearchResult(user);
+                    })
+                    .withFailureHandler(err => {
+                        handleSearchError();
+                    })
+                    .buscarUsuario(dni);
+            } else if (WEB_APP_URL) {
+                try {
+                    const response = await fetch(`${WEB_APP_URL}?action=buscar&dni=${dni}`);
+                    const user = await response.json();
+                    handleSearchResult(user);
+                } catch (err) {
+                    handleSearchError();
+                }
+            }
+        }
+
+        function handleSearchResult(user) {
+            logo.classList.remove('spinning');
+            actionBtn.disabled = false;
+            if (user) {
+                currentUser = user;
+                showUserDetails(user);
+                handleUserStatus(user);
+            } else {
+                showAlert('DNI no encontrado en el registro.', 'error');
+            }
+        }
+
+        function handleSearchError() {
+            logo.classList.remove('spinning');
+            actionBtn.disabled = false;
+            showAlert('Error de conexión con el servidor.', 'error');
+        }
+
+        function formatDate(dateInput) {
+            if (!dateInput) return "";
+            const date = new Date(dateInput);
+            if (isNaN(date.getTime())) return dateInput; 
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+
+        function handleUserStatus(user) {
+            if (user.entregado === "SI") {
+                const displayDate = formatDate(user.fecha_actual);
+                showAlert(`El material ha sido entregado el día ${displayDate}.`, 'warning');
+            } else {
+                btnText.textContent = "Solicitar material";
+                actionBtn.querySelector('i').className = "fa-solid fa-book-bookmark";
+                isSearching = false;
+            }
+        }
+
+        function showUserDetails(user) {
+            userName.textContent = `${user.nombre} ${user.apellido}`;
+            userCareer.textContent = user.carrera || "No especificada";
+            userDataCard.style.display = 'block';
+        }
+
+        async function requestMaterial() {
+            if (!currentUser) return;
+            logo.classList.add('spinning');
+            actionBtn.disabled = true;
+            btnText.textContent = "Registrando...";
+
+            if (typeof google !== 'undefined' && google.script && google.script.run) {
+                google.script.run
+                    .withSuccessHandler(success => {
+                        handleRequestResult(success);
+                    })
+                    .withFailureHandler(err => {
+                        handleRequestError();
+                    })
+                    .marcarEntregado(currentUser.dni);
+            } else if (WEB_APP_URL) {
+                try {
+                    const response = await fetch(`${WEB_APP_URL}?action=marcar&dni=${currentUser.dni}`);
+                    const success = await response.json();
+                    handleRequestResult(success);
+                } catch (err) {
+                    handleRequestError();
+                }
+            }
+        }
+
+        function handleRequestResult(success) {
+            logo.classList.remove('spinning');
+            if (success) {
+                showSuccessState(new Date().toLocaleDateString('es-ES'));
+            } else {
+                showAlert('No se pudo registrar la entrega.', 'error');
+            }
+        }
+
+        function handleRequestError() {
+            logo.classList.remove('spinning');
+            actionBtn.disabled = false;
+            showAlert('Error al registrar entrega.', 'error');
+        }
+
+        function showSuccessState(date) {
+            showAlert(`Material solicitado correctamente el ${date}.`, 'success');
+            dniInput.disabled = true;
+        }
+
+        dniInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') actionBtn.click();
+        });
+    </script>
+</body>
+
+</html>

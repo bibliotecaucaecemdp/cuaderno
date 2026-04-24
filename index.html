@@ -402,7 +402,7 @@
                 <span class="data-value" id="userName">-</span>
             </div>
             <div class="data-item">
-                <span class="data-label">Carrera</span>
+                <span class="data-label" id="userCareerLabel">Carrera</span>
                 <span class="data-value" id="userCareer">-</span>
             </div>
         </div>
@@ -423,6 +423,7 @@
         const userDataCard = document.getElementById('userDataCard');
         const userName = document.getElementById('userName');
         const userCareer = document.getElementById('userCareer');
+        const userCareerLabel = document.getElementById('userCareerLabel');
         const modalOverlay = document.getElementById('modalOverlay');
         const modalContent = document.getElementById('modalContent');
         const modalMessage = document.getElementById('modalMessage');
@@ -454,6 +455,7 @@
             qrContainer.innerHTML = "";
             qrLegend.style.display = 'none';
             qrCountdown.style.display = 'none';
+            userCareerLabel.textContent = "Carrera";
             modalContent.classList.remove('docente-theme');
             modalIcon.src = "icono.png";
             if (qrTimeout) clearTimeout(qrTimeout);
@@ -606,6 +608,8 @@
 
         function showUserDetails(user) {
             userName.textContent = `${user.nombre} ${user.apellido}`;
+            const userType = (user.tipo || '').toLowerCase();
+            userCareerLabel.textContent = userType === 'staff' ? "Area" : "Carrera";
             userCareer.textContent = user.carrera || "No especificada";
             userDataCard.style.display = 'block';
         }

@@ -429,6 +429,7 @@
         const qrContainer = document.getElementById('qrcode');
         const qrLegend = document.getElementById('qrLegend');
         const qrCountdown = document.getElementById('qrCountdown');
+        const modalIcon = document.getElementById('modalIcon');
 
         let currentUser = null;
         let isSearching = true;
@@ -454,6 +455,7 @@
             qrLegend.style.display = 'none';
             qrCountdown.style.display = 'none';
             modalContent.classList.remove('docente-theme');
+            modalIcon.src = "icono.png";
             if (qrTimeout) clearTimeout(qrTimeout);
             if (qrInterval) clearInterval(qrInterval);
         }
@@ -464,13 +466,17 @@
             qrLegend.style.display = 'none';
             qrCountdown.style.display = 'none';
             modalContent.classList.remove('docente-theme');
+            modalIcon.src = "icono.png";
             modalOverlay.style.display = 'flex';
             if (qrTimeout) clearTimeout(qrTimeout);
             if (qrInterval) clearInterval(qrInterval);
 
             if (type === 'success' && currentUser) {
                 const isDocente = currentUser.tipo && currentUser.tipo.toLowerCase() === 'docente';
-                if (isDocente) modalContent.classList.add('docente-theme');
+                if (isDocente) {
+                    modalContent.classList.add('docente-theme');
+                    modalIcon.src = "icono_docente.png";
+                }
 
                 qrLegend.style.display = 'block';
                 qrCountdown.style.display = 'block';

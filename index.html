@@ -472,10 +472,13 @@
             if (qrInterval) clearInterval(qrInterval);
 
             if (type === 'success' && currentUser) {
-                const isDocente = currentUser.tipo && currentUser.tipo.toLowerCase() === 'docente';
-                if (isDocente) {
+                const userType = (currentUser.tipo || '').toLowerCase();
+                const isSpecial = userType === 'docente' || userType === 'staff';
+                
+                if (isSpecial) {
                     modalContent.classList.add('docente-theme');
                     modalIcon.src = "icono_docente.png";
+                    document.querySelector('.docente-badge').textContent = userType.toUpperCase();
                 }
 
                 qrLegend.style.display = 'block';
@@ -486,8 +489,8 @@
                     text: qrText,
                     width: 140,
                     height: 140,
-                    colorDark: isDocente ? "#ffffff" : "#006b76",
-                    colorLight: isDocente ? "#000000" : "#ffffff",
+                    colorDark: isSpecial ? "#ffffff" : "#006b76",
+                    colorLight: isSpecial ? "#000000" : "#ffffff",
                     correctLevel: QRCode.CorrectLevel.H
                 });
 

@@ -327,10 +327,10 @@
         .docente-badge {
             display: none;
             color: #fff;
-            font-size: 1.5rem;
+            font-size: 1.1rem;
             font-weight: 900;
             margin-bottom: 15px;
-            letter-spacing: 5px;
+            letter-spacing: 2px;
             animation: smoothFade 1.5s ease-in-out infinite;
         }
 
@@ -474,9 +474,10 @@
             if (qrInterval) clearInterval(qrInterval);
 
             if (type === 'success' && currentUser) {
-                const userType = (currentUser.tipo || '').toLowerCase();
-                const isSpecial = userType === 'docente' || userType === 'staff';
-                
+                const userType = (currentUser.tipo || '').toLowerCase().trim();
+                const specialTypes = ['docente', 'staff', 'docente/staff', 'estudiante/docente'];
+                const isSpecial = specialTypes.includes(userType);
+
                 if (isSpecial) {
                     modalContent.classList.add('docente-theme');
                     modalIcon.src = "icono_docente.png";
